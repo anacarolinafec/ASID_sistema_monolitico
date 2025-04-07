@@ -17,7 +17,6 @@ import com.ijse.bookstore.service.BookService;
 
 
 
-@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class BookController {
     

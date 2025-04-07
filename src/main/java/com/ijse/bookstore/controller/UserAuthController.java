@@ -1,6 +1,5 @@
 package com.ijse.bookstore.controller;
 
-import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -27,7 +26,6 @@ import com.ijse.bookstore.entity.User;
 import com.ijse.bookstore.repository.UserRepository;
 import com.ijse.bookstore.service.security.jwt.JwtUtils;
 
-@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class UserAuthController {
 

@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ijse.bookstore.entity.CartItem;
 import com.ijse.bookstore.service.CartItemService;
 
-@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class CartItemController {
     @Autowired

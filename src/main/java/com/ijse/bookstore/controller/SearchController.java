@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ijse.bookstore.entity.Book;
 import com.ijse.bookstore.service.BookService;
 
-@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class SearchController {
     @Autowired

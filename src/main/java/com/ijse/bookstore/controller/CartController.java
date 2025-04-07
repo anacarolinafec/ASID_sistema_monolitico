@@ -19,7 +19,6 @@ import com.ijse.bookstore.repository.UserRepository;
 import com.ijse.bookstore.service.CartService;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
 public class CartController {
     
     @Autowired
