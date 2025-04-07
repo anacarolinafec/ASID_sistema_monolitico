@@ -1,4 +1,4 @@
-package com.ijse.bookstore.messagingRABBIT;
+package com.ijse.bookstore.producer;
 
 import com.ijse.bookstore.dto.OrderShippingConfirmation;
 import lombok.extern.slf4j.Slf4j;

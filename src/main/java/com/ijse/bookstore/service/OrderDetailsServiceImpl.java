@@ -3,7 +3,7 @@ package com.ijse.bookstore.service;
 import com.ijse.bookstore.dto.NewOrderDTO;
 import com.ijse.bookstore.dto.OrderShippingConfirmation;
 import com.ijse.bookstore.entity.*;
-import com.ijse.bookstore.messagingRABBIT.MessageProducer;
+import com.ijse.bookstore.producer.MessageProducer;
 import com.ijse.bookstore.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

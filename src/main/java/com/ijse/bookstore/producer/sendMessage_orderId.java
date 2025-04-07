@@ -1,4 +1,4 @@
-package com.ijse.bookstore.messagingRABBIT;
+package com.ijse.bookstore.producer;
 
 import com.ijse.bookstore.entity.OrderDetails;
 import com.ijse.bookstore.repository.OrderDetailsRepository;

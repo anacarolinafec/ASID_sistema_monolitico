@@ -30,14 +30,7 @@ public class User {
     @Column(unique = true)
     private String email;
 
-
-    @OneToOne
-    @JoinColumn(name = "shipping_information_id")
-    private ShippingOrder shippingOrder;
-
     @OneToOne
     @JoinColumn(name = "cart_id")
     private Cart cart;
-
-
 }
