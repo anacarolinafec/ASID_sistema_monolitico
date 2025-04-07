@@ -1,10 +1,14 @@
 package com.ijse.bookstore.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ijse.bookstore.dto.NewOrderDTO;
 import com.ijse.bookstore.dto.OrderShippingConfirmation;
 import com.ijse.bookstore.entity.*;
 import com.ijse.bookstore.producer.MessageProducer;
 import com.ijse.bookstore.repository.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +19,8 @@ import java.util.List;
 
 @Service
 public class OrderDetailsServiceImpl implements OrderDetailsService{
-    
+
+    private static final Logger log = LoggerFactory.getLogger(OrderDetailsServiceImpl.class);
     @Autowired
     private OrderDetailsRepository orderDetailsRepository;
     @Autowired
@@ -28,6 +33,8 @@ public class OrderDetailsServiceImpl implements OrderDetailsService{
     private MessageProducer messageProducer;
     @Autowired
     private OrderRepository orderRepository;
+    @Autowired
+    ObjectMapper objectMapper;
 
     public Order createOrderDetails(NewOrderDTO newOrderDTO) {
         User user = userRepository.findById(newOrderDTO.getUserId())
@@ -53,7 +60,13 @@ public class OrderDetailsServiceImpl implements OrderDetailsService{
         orderShippingConfirmation.setCity(newOrderDTO.getCity());
         orderShippingConfirmation.setPostalCode(newOrderDTO.getPostalCode());
 
-        messageProducer.sendOrderShippingConfirmation(orderShippingConfirmation);
+        try {
+            var orderShippingConfirmationJson = objectMapper.writeValueAsString(orderShippingConfirmation);
+            messageProducer.sendMessage(orderShippingConfirmationJson);
+        } catch (JsonProcessingException e) {
+            log.error("Error happened on sending object on rabbit mq");
+            throw new RuntimeException(e);
+        }
 
         return order;
     }
@@ -75,6 +88,10 @@ public class OrderDetailsServiceImpl implements OrderDetailsService{
     }
 
     private double calculateTotalPrice (List<OrderDetails> orderDetails){
+        if(orderDetails.isEmpty()){
+            return 0;
+        }
+
         double sum = 0;
         for (var orderDetail: orderDetails){
             sum += orderDetail.getSubTotal();

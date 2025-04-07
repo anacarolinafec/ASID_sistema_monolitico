@@ -22,8 +22,7 @@ public class Cart {
     @JoinColumn(name="user_id")
     private User user;
 
-    @OneToMany
     @JoinColumn(name="cartItem_id")
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<CartItem> cartItems;
-    
 }

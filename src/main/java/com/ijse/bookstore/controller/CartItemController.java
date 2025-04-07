@@ -33,8 +33,6 @@ public class CartItemController {
         CartItem createdCartItem = cartItemService.createCartItem(createCartItem);
 
         return new ResponseEntity<>(createdCartItem,HttpStatus.CREATED);
- 
-         
     }
 
     @GetMapping("/cartitem")

@@ -23,12 +23,7 @@ public class MessageProducer {
     }
 
     public void sendMessage(String message) {
+        log.info("operation='sendOrderShippingConfirmation', message='{}'", message);
         rabbitTemplate.convertAndSend(exchange, routingKey, message);
-        System.out.println("Mensagem enviada: " + message);
-    }
-
-    public void sendOrderShippingConfirmation(OrderShippingConfirmation orderShippingConfirmation) {
-        log.info("operation='sendOrderShippingConfirmation', orderShipping='{}'", orderShippingConfirmation);
-        rabbitTemplate.convertAndSend(exchange, routingKey, orderShippingConfirmation);
     }
 }
