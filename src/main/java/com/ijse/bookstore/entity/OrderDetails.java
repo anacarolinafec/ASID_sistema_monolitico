@@ -7,7 +7,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import lombok.Data;
 
 @Entity
@@ -29,16 +28,11 @@ public class OrderDetails {
     @JoinColumn(name = "book_id")
     private Book book;
 
-    @OneToOne
-    @JoinColumn(name = "shippingorder_id")
-    private ShippingOrder shippingOrder;
-
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "cart_id")
-    private Cart cart;
-
+    @JoinColumn(name = "order_id")
+    private Order order;
 }

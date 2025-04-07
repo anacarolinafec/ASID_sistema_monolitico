@@ -1,16 +1,16 @@
 package com.ijse.bookstore.service;
 
 import com.ijse.bookstore.dto.NewOrderDTO;
+import com.ijse.bookstore.dto.OrderShippingConfirmation;
 import com.ijse.bookstore.entity.*;
-import com.ijse.bookstore.repository.BookRepository;
-import com.ijse.bookstore.repository.CartRepository;
-import com.ijse.bookstore.repository.UserRepository;
+import com.ijse.bookstore.messagingRABBIT.MessageProducer;
+import com.ijse.bookstore.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
-import com.ijse.bookstore.repository.OrderDetailsRepository;
-
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -21,31 +21,61 @@ public class OrderDetailsServiceImpl implements OrderDetailsService{
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private BookRepository bookRepository;
-    @Autowired
     private CartRepository cartRepository;
     @Autowired
     private CartService cartService;
     @Autowired
-    private CartItemService cartItemService;
+    private MessageProducer messageProducer;
+    @Autowired
+    private OrderRepository orderRepository;
 
-
-    public OrderDetails createOrderDetails(NewOrderDTO newOrderDTO) {
-
+    public Order createOrderDetails(NewOrderDTO newOrderDTO) {
         User user = userRepository.findById(newOrderDTO.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("User nao existe")); //vai buscar o objeto que corresponde ao id dado
 
-        double sum = cartService.calculateCartTotal(newOrderDTO.getUserId());
-
         Cart cart = cartRepository.getCartIdByUserId(newOrderDTO.getUserId());
 
-        OrderDetails orderDetails = new OrderDetails();
-        orderDetails.setUser(user);
-        orderDetails.setUser(user);
-        orderDetails.setSubTotal(sum);
-        orderDetails.setCart(cart);
+        List<OrderDetails> orderDetails = createOrderDetailsFromCartItems(cart.getCartItems(), user);
 
-        return orderDetailsRepository.save(orderDetails);
+        Order order = new Order();
+        order.setOrderDate(Date.from(Instant.now()));
+        order.setOrderDetails(orderDetails);
+        order.setTotalPrice(calculateTotalPrice(orderDetails));
+        order.setUser(user);
 
+        order = orderRepository.save(order);
+
+        var orderShippingConfirmation = new OrderShippingConfirmation();
+        orderShippingConfirmation.setOrderId(order.getId());
+        orderShippingConfirmation.setUserId(user.getId());
+        orderShippingConfirmation.setOrderTotal(order.getTotalPrice());
+
+        messageProducer.sendOrderShippingConfirmation(orderShippingConfirmation);
+
+        return order;
+    }
+
+    private List<OrderDetails> createOrderDetailsFromCartItems(List<CartItem> cartItems, User user) {
+        List<OrderDetails> orderDetails = new ArrayList<>();
+        for(var cartItem: cartItems){
+            var book = cartItem.getBookid();
+
+            var orderDetail = new OrderDetails();
+            orderDetail.setBook(book);
+            orderDetail.setQuantity(cartItem.getQuantity());
+            orderDetail.setSubTotal(book.getPrice() * cartItem.getQuantity());
+            orderDetail.setUser(user);
+
+            orderDetails.add(orderDetail);
+        }
+        return orderDetails;
+    }
+
+    private double calculateTotalPrice (List<OrderDetails> orderDetails){
+        double sum = 0;
+        for (var orderDetail: orderDetails){
+            sum += orderDetail.getSubTotal();
+        }
+        return sum/orderDetails.size();
     }
 }
