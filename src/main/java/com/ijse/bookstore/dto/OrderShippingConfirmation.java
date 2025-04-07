@@ -6,6 +6,8 @@ import lombok.Data;
 public class OrderShippingConfirmation {
     private Long orderId;
     private Long userId;
-
     private double orderTotal;
+    private String address;
+    private String city;
+    private String postalCode;
 }

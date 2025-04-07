@@ -49,6 +49,9 @@ public class OrderDetailsServiceImpl implements OrderDetailsService{
         orderShippingConfirmation.setOrderId(order.getId());
         orderShippingConfirmation.setUserId(user.getId());
         orderShippingConfirmation.setOrderTotal(order.getTotalPrice());
+        orderShippingConfirmation.setAddress(newOrderDTO.getAddress());
+        orderShippingConfirmation.setCity(newOrderDTO.getCity());
+        orderShippingConfirmation.setPostalCode(newOrderDTO.getPostalCode());
 
         messageProducer.sendOrderShippingConfirmation(orderShippingConfirmation);
 
