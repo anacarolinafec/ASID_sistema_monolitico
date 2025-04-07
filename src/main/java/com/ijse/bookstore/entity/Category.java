@@ -11,9 +11,6 @@ import lombok.Data;
 @Entity
 @Data
 public class Category {
-    
-    public static final String HttpStatus = null;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "categoryid")
@@ -21,8 +18,4 @@ public class Category {
 
     @Column(unique = true)
     private String name;
-
-    
-   
-   
 }
