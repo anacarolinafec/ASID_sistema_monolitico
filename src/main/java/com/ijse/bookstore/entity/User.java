@@ -7,7 +7,8 @@ import lombok.Data;
 @Entity
 @Data
 public class User {
-    
+
+    // to do the user microservice
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "userid")
