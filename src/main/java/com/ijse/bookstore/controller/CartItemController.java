@@ -55,13 +55,6 @@ public class CartItemController {
         }
     }
 
-    @GetMapping("/cartitem/user/{username}")
-    public ResponseEntity<List<CartItem>> getCartItemByUsername(@PathVariable String username) {
-        List<CartItem> cartItems = cartItemService.getCartItemsByUsername(username);
-        return new ResponseEntity<>(cartItems, HttpStatus.OK);
-    }
-    
-
     @PatchMapping("/quantity/{id}")
     public ResponseEntity<CartItem> patchCartQuantity(@PathVariable Long id , @RequestBody CartItem cartItem){
 

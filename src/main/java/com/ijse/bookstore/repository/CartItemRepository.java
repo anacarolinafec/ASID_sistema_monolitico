@@ -21,11 +21,6 @@ public interface CartItemRepository extends JpaRepository<CartItem,Long> {
     @Query(value = "ALTER TABLE cart_item AUTO_INCREMENT = 1", nativeQuery = true)
     void resetAutoIncrement();
 
-    List<CartItem> findByUser(User user);
-
-    List<CartItem> findByUser_Username(String username);
-
     List<CartItem> findByCartId(Long cartId);
-
 
 }

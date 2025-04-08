@@ -29,30 +29,24 @@ public class CartItemServiceImpl implements CartItemService{
     @Autowired
     private CartRepository cartRepository;
 
-    // Metodo que cria um novo CartItem a partir de um DTO (objeto de transferência de dados)
     @Override
     public CartItem createCartItem(CartItemCreationDTO createCartItem){
-    //Este metodo recebe o DTO com os dados do livro, utilizador, carrinho e quantidade
-
-        User id_user = userRepository.findById(createCartItem.getUserId()).orElseThrow();
         Book book = bookRepository.findById(createCartItem.getBookId()).orElseThrow();
-        double sum = createCartItem.getQuantity() * book.getPrice();
-        Cart id_cart  = cartRepository.findById(createCartItem.getCartId()).orElseThrow();
+        Cart cart = cartRepository.findById(createCartItem.getCartId()).orElseThrow();
+
+        double unitPrice = book.getPrice();
+        int quantity = createCartItem.getQuantity();
+        double subtotal = quantity * unitPrice;
 
         CartItem cartItem = new CartItem();
         cartItem.setBookid(book);
-        cartItem.setUser(id_user);
-        cartItem.setQuantity(createCartItem.getQuantity());
-        cartItem.setUnitPrice(book.getPrice());
-        cartItem.setSubTotal(sum);
-        cartItem.setCart(id_cart);
+        cartItem.setQuantity(quantity);
+        cartItem.setUnitPrice(unitPrice);
+        cartItem.setSubTotal(subtotal);
+        cartItem.setCart(cart);
 
-        System.out.println("Quantity: " + createCartItem.getQuantity());
-        System.out.println("Unit Price: " + book.getPrice());
-        System.out.println("Subtotal: " + sum);
-
+        // Or just save the item directly
         return cartItemRepository.save(cartItem);
-
     }
 
    public List<CartItem> getAllCartitem(){
@@ -128,9 +122,4 @@ public class CartItemServiceImpl implements CartItemService{
         cartItemRepository.resetAutoIncrement();
     }
 
-    public List<CartItem> getCartItemsByUsername(String username) {
-
-        return cartItemRepository.findByUser_Username(username);
-        
-    }
 }

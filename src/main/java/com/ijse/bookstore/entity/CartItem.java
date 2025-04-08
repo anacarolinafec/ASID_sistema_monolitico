@@ -1,5 +1,6 @@
 package com.ijse.bookstore.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,7 +17,6 @@ public class CartItem {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
 
     @Column
@@ -33,10 +33,7 @@ public class CartItem {
     private Book bookid;
 
     @ManyToOne
-    @JoinColumn(name = "user_id") 
-    private User user;
-
-    @ManyToOne
     @JoinColumn(name = "cart_id")
+    @JsonIgnore
     private Cart cart;
 }

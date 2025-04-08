@@ -114,8 +114,7 @@ public class UserAuthController {
         
     }
 
-
-    @GetMapping("/id/{username}") 
+    @GetMapping("/username/{username}")
     public ResponseEntity<Optional<User>> getUserIdByUsername(@PathVariable String username) {
         Optional<User> userId = userRepository.findByUsername(username);
 
@@ -126,5 +125,13 @@ public class UserAuthController {
         }
     }
 
-  
+    @GetMapping("/id/{userId}")
+    public ResponseEntity<Optional<User>> getUserIdByUsername(@PathVariable long userId) {
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isPresent()) {
+            return ResponseEntity.ok(user);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

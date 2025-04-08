@@ -17,5 +17,4 @@ public interface CartItemService {
     CartItem deleteCartItyItemById(Long id);
     void clearCart();
     void resetAutoIncrement();
-    List<CartItem> getCartItemsByUsername(String username);
 }

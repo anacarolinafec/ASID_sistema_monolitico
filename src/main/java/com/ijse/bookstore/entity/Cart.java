@@ -1,8 +1,10 @@
 package com.ijse.bookstore.entity;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -11,7 +13,6 @@ import lombok.Data;
 public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "cartid")
     private Long id;
 
     @Column
@@ -19,9 +20,9 @@ public class Cart {
 
     @OneToOne
     @JoinColumn(name="user_id")
+    @JsonIgnore
     private User user;
 
-    @JoinColumn(name="cartItem_id")
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private List<CartItem> cartItems;
+    @OneToMany(mappedBy = "cart", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<CartItem> cartItems = new ArrayList<>();
 }
